@@ -1,0 +1,28 @@
+{
+  "app": {
+    "name": "Almena Catalog",
+    "network": "Almena Network"
+  },
+  "header": {
+    "language": "Language",
+    "theme": "Theme",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "footer": {
+    "rights": "Almena Network",
+    "site": "almena.id"
+  },
+  "home": {
+    "title": "Request your credentials",
+    "lead": "Services published by issuers on the Almena Network. Apply with your Almena wallet and keep the credential in it.",
+    "by": "Issued by {issuer}",
+    "apply": "Apply",
+    "count": "{count} services",
+    "empty": "No issuer has published a service yet.",
+    "unavailable": "The catalog cannot be reached right now. Try again in a moment."
+  }
+}

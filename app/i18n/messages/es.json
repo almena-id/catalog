@@ -1,0 +1,28 @@
+{
+  "app": {
+    "name": "Almena Catalog",
+    "network": "Almena Network"
+  },
+  "header": {
+    "language": "Idioma",
+    "theme": "Tema",
+    "themes": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
+  "footer": {
+    "rights": "Almena Network",
+    "site": "almena.id"
+  },
+  "home": {
+    "title": "Solicita tus credenciales",
+    "lead": "Servicios publicados por los emisores de Almena Network. Solicítalos con tu wallet de Almena y guarda en ella la credencial.",
+    "by": "Emitida por {issuer}",
+    "apply": "Solicitar",
+    "count": "{count} servicios",
+    "empty": "Ningún emisor ha publicado un servicio todavía.",
+    "unavailable": "No se puede acceder al catálogo ahora mismo. Inténtalo de nuevo en un momento."
+  }
+}

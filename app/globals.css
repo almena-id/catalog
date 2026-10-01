@@ -1,0 +1,211 @@
+/*
+ * Almena Catalog — the theme. Components are shadcn/ui (app/components/ui)
+ * styled with Tailwind; this file gives them the Almena palette through
+ * shadcn's variables. The greys are the wallet's and the registry's; the
+ * brand is blue, the catalog's own identity, where the wallet is orange and
+ * the registry green. This file is the only place a colour is written.
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Dark is asked for twice — by the system, unless light was chosen, and by the
+   choice itself (`data-theme` on <html>, from the almena.theme cookie). */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------- tokens */
+
+:root {
+  color-scheme: light dark;
+  --radius: 0.75rem;
+
+  /* A grey ladder with steps that can be seen: page, panel, raised, sunk. */
+  --background: #f2f3f6;
+  --foreground: #17181c;
+  --card: #ffffff;
+  --card-foreground: #17181c;
+  --popover: #ffffff;
+  --popover-foreground: #17181c;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eaef;
+  --secondary-foreground: #17181c;
+  --muted: #e8eaef;
+  --muted-foreground: rgba(23, 24, 28, 0.6);
+  --accent: rgba(23, 24, 28, 0.05);
+  --accent-foreground: #17181c;
+  --destructive: #c9372c;
+  --border: rgba(23, 24, 28, 0.1);
+  --input: rgba(23, 24, 28, 0.18);
+  --ring: #2563eb;
+
+  /* Almena's own, beyond shadcn's set. */
+  --brand-strong: #1d4ed8;
+  --brand-soft: rgba(37, 99, 235, 0.12);
+  --brand-glow: rgba(37, 99, 235, 0.14);
+  --destructive-soft: rgba(201, 55, 44, 0.12);
+  --faint: rgba(23, 24, 28, 0.42);
+  --sunk: #e8eaef;
+  --shadow-card: 0 1px 2px rgba(23, 24, 28, 0.06), 0 8px 24px rgba(23, 24, 28, 0.06);
+  /* Scanners want dark on light, whatever the theme. */
+  --qr-paper: #ffffff;
+
+  /* The page uses the screen: fluid up to a very wide monitor, with side
+     gutters that grow with it. Header, content and footer share both. */
+  --page-width: 1920px;
+  --gutter: clamp(16px, 3vw, 48px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0f1013;
+    --foreground: #f4f4f6;
+    --card: #17191d;
+    --card-foreground: #f4f4f6;
+    --popover: #1f2127;
+    --popover-foreground: #f4f4f6;
+    --secondary: #0b0c0e;
+    --secondary-foreground: #f4f4f6;
+    --muted: #0b0c0e;
+    --muted-foreground: rgba(244, 244, 246, 0.62);
+    --accent: rgba(255, 255, 255, 0.06);
+    --accent-foreground: #f4f4f6;
+    --destructive: #ff6b5e;
+    --border: rgba(255, 255, 255, 0.09);
+    --input: rgba(255, 255, 255, 0.16);
+    --primary: #3b82f6;
+    --ring: #3b82f6;
+    --brand-strong: #60a5fa;
+    --brand-soft: rgba(59, 130, 246, 0.16);
+    --brand-glow: rgba(59, 130, 246, 0.2);
+    --destructive-soft: rgba(255, 107, 94, 0.16);
+    --faint: rgba(244, 244, 246, 0.4);
+    --sunk: #0b0c0e;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0f1013;
+  --foreground: #f4f4f6;
+  --card: #17191d;
+  --card-foreground: #f4f4f6;
+  --popover: #1f2127;
+  --popover-foreground: #f4f4f6;
+  --secondary: #0b0c0e;
+  --secondary-foreground: #f4f4f6;
+  --muted: #0b0c0e;
+  --muted-foreground: rgba(244, 244, 246, 0.62);
+  --accent: rgba(255, 255, 255, 0.06);
+  --accent-foreground: #f4f4f6;
+  --destructive: #ff6b5e;
+  --border: rgba(255, 255, 255, 0.09);
+  --input: rgba(255, 255, 255, 0.16);
+  --primary: #3b82f6;
+  --ring: #3b82f6;
+  --brand-strong: #60a5fa;
+  --brand-soft: rgba(59, 130, 246, 0.16);
+  --brand-glow: rgba(59, 130, 246, 0.2);
+  --destructive-soft: rgba(255, 107, 94, 0.16);
+  --faint: rgba(244, 244, 246, 0.4);
+  --sunk: #0b0c0e;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+@theme inline {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-faint: var(--faint);
+  --color-sunk: var(--sunk);
+  --color-qr-paper: var(--qr-paper);
+  --shadow-card: var(--shadow-card);
+}
+
+/* ----------------------------------------------------------------- base */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* One column the page's width, header to footer. */
+@utility page-frame {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ---------------------------------------------------------------- shell */
+
+/* Soft brand light at the top right, as in the wallet. */
+.shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60% 40% at 85% 0%, var(--brand-glow), transparent 70%);
+  pointer-events: none;
+}
+
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
