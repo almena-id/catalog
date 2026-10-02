@@ -37,9 +37,12 @@ before finishing.
 - Light/dark/system is the `almena.theme` cookie, rendered as `data-theme` on
   `<html>` by the server; Tailwind's `dark:` follows it. The language and
   theme menus are in the footer (`ChoiceMenu`).
-- Blue is the catalog's identity: the Almena mark (`Logo`, `app/icon.svg`)
-  and the primary colour are blue here, where the registry and the wallet are
-  orange. `app/globals.css` holds only the theme — shadcn's variables — and
+- Blue `#2563eb` is the catalog's identity, the same in the light and the
+  dark theme: `--primary` and `--ring`, `--brand-strong` `#1d4ed8` (hover),
+  and the Almena mark (`Logo`, `app/icon.svg`); only its soft tints
+  (`--brand-soft`, `--brand-glow`) are a little stronger in the dark theme. The identity colours across Almena: status cyan `#3fe0ff`, catalog blue
+  `#2563eb`, registry green `#1f9d55`, mediator blue `#2f6fed`, landing
+  orange `#eb7229`, docu yellow `#f2b705`, the wallet the person's choice (orange by default). `app/globals.css` holds only the theme — shadcn's variables — and
   is the only place a colour is written (`app/icon.svg` aside).
 - Typefaces, self-hosted with `next/font` in `app/layout.tsx`: Chakra Petch
   (`font-brand`: headings, the wordmark), Inter (`font-sans`: the
