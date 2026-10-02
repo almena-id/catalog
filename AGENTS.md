@@ -41,6 +41,9 @@ before finishing.
   and the primary colour are blue here, where the registry and the wallet are
   orange. `app/globals.css` holds only the theme — shadcn's variables — and
   is the only place a colour is written (`app/icon.svg` aside).
+- Typefaces, self-hosted with `next/font` in `app/layout.tsx`: Chakra Petch
+  (`font-brand`: headings, the wordmark), Inter (`font-sans`: the
+  interface), JetBrains Mono (`font-mono`: figures and codes).
 - The interface is shadcn/ui (`components.json`, Radix base), copied from the
   registry with its Almena variants: components in `app/components/ui` (add
   more with `npx shadcn add <name>`, the CLI pinned in devDependencies),

@@ -10,7 +10,7 @@ export function SiteHeader({ t }: { t: Dictionary }) {
       <div className="page-frame flex items-center gap-4 py-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 text-[17px] tracking-tight whitespace-nowrap"
+          className="inline-flex items-center gap-2.5 font-brand text-[17px] tracking-tight whitespace-nowrap"
           aria-label={t.app.name}
         >
           <Logo size={28} />
