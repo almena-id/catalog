@@ -28,6 +28,10 @@ before finishing.
   happens in the registry portal (`NEXT_PUBLIC_REGISTRY_WEB_URL`,
   `/credentials/{issuer}/{type}`) until that flow moves here.
 - `app/health/route.ts` is the Docker health check: keep it dependency-free.
+- `app/.well-known/`: `security.txt` (RFC 9116, this repository's advisories)
+  and `did-configuration.json`, read as it is from `CATALOG_WEB_WELL_KNOWN_DIR`:
+  the Domain Linkage Credential tying this origin to `did:web:almena.id` is
+  signed elsewhere, the portal holds no key.
 - `output: "standalone"` in `next.config.ts` is what the Dockerfile ships.
 - User-facing text is translatable: English (`en`) is the source and fallback,
   Spanish (`es`) the first translation (`app/i18n/messages/*.json`). No
