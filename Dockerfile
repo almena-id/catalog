@@ -17,15 +17,20 @@ ARG NEXT_PUBLIC_CATALOG_WEB_URL=https://catalog.almena.id
 ARG NEXT_PUBLIC_REGISTRY_WEB_URL=https://registry.almena.id
 ENV NEXT_PUBLIC_CATALOG_WEB_URL=$NEXT_PUBLIC_CATALOG_WEB_URL \
     NEXT_PUBLIC_REGISTRY_WEB_URL=$NEXT_PUBLIC_REGISTRY_WEB_URL
+# year.month.sequence, set by the image workflow; /health reports it.
+ARG ALMENA_VERSION=dev
+ENV ALMENA_VERSION=$ALMENA_VERSION
 RUN npm run build
 
 # ---- runtime ----
 FROM node:24-alpine AS runtime
 WORKDIR /app
+ARG ALMENA_VERSION=dev
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     HOSTNAME=0.0.0.0 \
-    PORT=3000
+    PORT=3000 \
+    ALMENA_VERSION=$ALMENA_VERSION
 RUN adduser --system --uid 10001 --no-create-home catalog
 COPY --from=build --chown=catalog /app/.next/standalone ./
 COPY --from=build --chown=catalog /app/.next/static ./.next/static
