@@ -1,6 +1,6 @@
 # almena-catalog
 
-The public catalog of the Almena Network, published at `https://catalog.almena.id`: the services issuers publish to request verifiable credentials, open to anyone with an Almena wallet. Built with [Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript and Tailwind CSS 4. Its data comes from the public catalogue of [api](../api).
+The public catalog of Almena ID, published at `https://catalog.almena.id`: the services issuers publish to request verifiable credentials, open to anyone with an Almena wallet. Built with [Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript and Tailwind CSS 4. Its data comes from the public catalogue of [api](../api).
 
 ## Quick start
 

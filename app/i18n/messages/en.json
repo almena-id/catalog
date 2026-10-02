@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Almena Catalog",
-    "network": "Almena Network"
+    "network": "Almena ID"
   },
   "header": {
     "language": "Language",
@@ -13,12 +13,12 @@
     }
   },
   "footer": {
-    "rights": "Almena Network",
+    "rights": "Almena ID",
     "site": "almena.id"
   },
   "home": {
     "title": "Request your credentials",
-    "lead": "Services published by issuers on the Almena Network. Apply with your Almena wallet and keep the credential in it.",
+    "lead": "Services published by issuers on Almena ID. Apply with your Almena wallet and keep the credential in it.",
     "by": "Issued by {issuer}",
     "apply": "Apply",
     "count": "{count} services",

@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # catalog
 
-The public catalog of the Almena Network: the services issuers publish to
+The public catalog of Almena ID: the services issuers publish to
 request verifiable credentials. Its data comes from the API's public
 catalogue (`../api`, FastAPI); nobody signs in here. Everything is written in
 English. Use `task` for everything (`task --list`); `task check` must pass

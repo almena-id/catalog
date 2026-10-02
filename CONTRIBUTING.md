@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping with the Almena Network catalog portal. By taking part you
+Thanks for helping with the Almena ID catalog portal. By taking part you
 agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md). Security issues go
 through [SECURITY.md](SECURITY.md), never through public issues.
 
