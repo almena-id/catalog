@@ -40,9 +40,7 @@ before finishing.
 - Blue `#2563eb` is the catalog's identity, the same in the light and the
   dark theme: `--primary` and `--ring`, `--brand-strong` `#1d4ed8` (hover),
   and the Almena mark (`Logo`, `app/icon.svg`); only its soft tints
-  (`--brand-soft`, `--brand-glow`) are a little stronger in the dark theme. The identity colours across Almena: status cyan `#3fe0ff`, catalog blue
-  `#2563eb`, registry green `#1f9d55`, mediator magenta `#d63384`, landing
-  orange `#eb7229`, docu yellow `#f2b705`, the wallet the person's choice (orange by default). `app/globals.css` holds only the theme — shadcn's variables — and
+  (`--brand-soft`, `--brand-glow`) are a little stronger in the dark theme. `app/globals.css` holds only the theme — shadcn's variables — and
   is the only place a colour is written (`app/icon.svg` aside).
 - Typefaces, self-hosted with `next/font` in `app/layout.tsx`: Chakra Petch
   (`font-brand`: headings, the wordmark), Inter (`font-sans`: the
