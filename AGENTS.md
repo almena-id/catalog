@@ -22,11 +22,21 @@ before finishing.
 - "Catalog" is this portal. Keep it apart from the registry's Catalogue (the
   field and credential type catalogue tenants build forms from), which this
   portal only reads to name things.
-- `/` lists every published issuer's offers (`GET /catalog/issuers`, a type
-  it grants with a request form) named from Almena's credential types
-  (`GET /catalog/credentials`), in `app/lib/offers.ts`. Applying still
-  happens in the registry portal (`NEXT_PUBLIC_REGISTRY_WEB_URL`,
-  `/credentials/{issuer}/{type}`) until that flow moves here.
+- `/` lists every published issuer's offers (`GET /catalog/offers`, a type
+  it grants with a request form, already named and categorised by the API),
+  a page at a time as it is scrolled (`app/lib/offers.ts`,
+  `app/lib/offer-actions.ts`, `app/OfferGrid.tsx`), each opening its page.
+- Applying happens here, with no account: `/credentials/{issuer}/{type}` is
+  an offer (`GET /catalog/issuers/{slug}/offers/{type}`: the issuer, the
+  credential and its form) and Start (`POST /applications`) keeps the
+  application's secret in an HTTP-only cookie (`almena.application.{id}`, a
+  day) and opens `/apply/{id}`: pair the wallet (QR 1), present credentials,
+  fill in the fields and files, sign and send (QR 2), and once issued receive
+  it (QR 3). Every call goes through the server actions in
+  `app/lib/application-actions.ts` with the secret as `X-Application-Secret`;
+  the wallet requests name this portal as `client_id` (the API's
+  `REGISTRY_CATALOG_URL`). `app/components/FieldInput.tsx` draws each field
+  by its catalogue type. The issuer decides and issues in the registry portal.
 - `app/health/route.ts` is the Docker health check: keep it dependency-free.
 - `app/.well-known/`: `security.txt` (RFC 9116, this repository's advisories)
   and `did-configuration.json`, read as it is from `CATALOG_WEB_WELL_KNOWN_DIR`:

@@ -1,6 +1,6 @@
 # almena-catalog
 
-The public catalog of Almena ID, published at `https://catalog.almena.id`: the services issuers publish to request verifiable credentials, open to anyone with an Almena wallet. Built with [Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript and Tailwind CSS 4. Its data comes from the public catalogue of [api](../api).
+The public catalog of Almena ID, published at `https://catalog.almena.id`: the services issuers publish to request verifiable credentials, open to anyone with an Almena wallet, and where they apply for them — no account, the wallet pairs, presents, signs and receives. Built with [Next.js](https://nextjs.org) 16 (App Router), React 19, TypeScript and Tailwind CSS 4. Its data comes from the public catalogue of [api](../api).
 
 ## Quick start
 
@@ -28,7 +28,6 @@ Read from the environment or `.env`; [.env.example](.env.example) explains every
 |---|---|---|
 | `NEXT_PUBLIC_CATALOG_WEB_URL` | `https://catalog.almena.id` | Public origin of the portal, for metadata; inlined at build time |
 | `CATALOG_API_URL` | `https://api.almena.id` | The API as the Next.js server reaches it, read at runtime |
-| `NEXT_PUBLIC_REGISTRY_WEB_URL` | `https://registry.almena.id` | The registry portal, where an offer is applied for for now; inlined at build time |
 | `CATALOG_WEB_WELL_KNOWN_DIR` | — | Directory with the origin's `did-configuration.json`, served at `/.well-known/` (off while empty; Compose mounts `./well-known`) |
 | `CATALOG_WEB_PORT` | `3100` | Port of the portal on the host |
 
@@ -37,6 +36,8 @@ Read from the environment or `.env`; [.env.example](.env.example) explains every
 | | |
 |---|---|
 | `GET /` | The catalog: every published issuer's offers |
+| `GET /credentials/{issuer}/{type}` | An offer: the issuer, the credential, what its form asks for, and Start |
+| `GET /apply/{id}` | An application this browser started (its secret in a cookie): pair the wallet, present, fill in, sign and send, and once issued receive the credential |
 | `GET /health` | Liveness and the running version, used by the Docker health check |
 | `GET /.well-known/did-configuration.json` | The origin's [DID configuration](https://identity.foundation/.well-known/resources/did-configuration/): a Domain Linkage Credential tying it to `did:web:almena.id`, signed elsewhere and served as it is from `CATALOG_WEB_WELL_KNOWN_DIR`; `404` without it |
 | `GET /.well-known/security.txt` | Where to report a vulnerability ([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)): this repository's private advisories; `Expires` stays 180 days ahead |

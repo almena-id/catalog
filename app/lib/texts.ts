@@ -5,3 +5,11 @@ export type Labels = Record<string, string | undefined>;
 export function label(labels: Labels, locale: string): string {
   return labels[locale] || labels.en || Object.values(labels).find(Boolean) || "";
 }
+
+/** Texts by language, as the API keeps a form's name, help and purposes. */
+export type Texts = Partial<Record<string, string>>;
+
+/** Whether any language has text. */
+export function hasText(value: Texts | undefined | null): boolean {
+  return Object.values(value ?? {}).some((text) => text?.trim());
+}

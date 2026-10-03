@@ -6,7 +6,6 @@ services:
       context: .
       args:
         NEXT_PUBLIC_CATALOG_WEB_URL: ${NEXT_PUBLIC_CATALOG_WEB_URL:-https://catalog.almena.id}
-        NEXT_PUBLIC_REGISTRY_WEB_URL: ${NEXT_PUBLIC_REGISTRY_WEB_URL:-https://registry.almena.id}
     image: almena-catalog:dev
     restart: unless-stopped
     ports:
