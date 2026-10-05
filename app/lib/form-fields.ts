@@ -98,4 +98,6 @@ export type CredentialRequest = {
   issuers?: string[];
   /** The keys of the form's fields it fills. */
   fills: string[];
+  /** Its type's name, by language: an issuer's own types are not Almena's. */
+  labels?: Texts;
 };

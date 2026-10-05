@@ -4,7 +4,11 @@ import { cookies } from "next/headers";
 
 import { api } from "./api";
 import type { CredentialType } from "./catalogues";
-import type { CatalogueField, CredentialRequest, FormField } from "./form-fields";
+import type {
+  CatalogueField,
+  CredentialRequest,
+  FormField,
+} from "./form-fields";
 import type { Texts } from "./texts";
 
 /** What an issued credential's status is, as its issuer's list says. */
@@ -20,7 +24,8 @@ export type Offer = {
   issuer: {
     slug: string;
     name: string;
-    description: string | null;
+    /** By language. */
+    description: Texts | null;
     did: string;
   };
   credential_type: CredentialType;
@@ -91,7 +96,9 @@ export async function fetchOffer(
   type: string,
 ): Promise<Offer | null> {
   const { data } = await api<Offer>(
-    `/catalog/issuers/${encodeURIComponent(issuer)}/offers/${encodeURIComponent(type)}`,
+    // A route parameter may come encoded or not (`custom:{key}`); no type id
+    // holds a `%`, so decoding first is safe either way.
+    `/catalog/issuers/${encodeURIComponent(issuer)}/offers/${encodeURIComponent(decodeURIComponent(type))}`,
   );
   return data;
 }

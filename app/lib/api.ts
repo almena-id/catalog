@@ -29,13 +29,18 @@ export async function api<T>(
       method: init.method ?? "GET",
       headers: {
         accept: "application/json",
-        ...(init.form || init.body === undefined ? {} : { "Content-Type": "application/json" }),
+        ...(init.form || init.body === undefined
+          ? {}
+          : { "Content-Type": "application/json" }),
         ...init.headers,
       },
-      body: init.form ?? (init.body === undefined ? undefined : JSON.stringify(init.body)),
+      body:
+        init.form ??
+        (init.body === undefined ? undefined : JSON.stringify(init.body)),
       cache: "no-store",
     });
-    const json = response.status === 204 ? null : await response.json().catch(() => null);
+    const json =
+      response.status === 204 ? null : await response.json().catch(() => null);
     const ok = response.ok;
     return {
       status: response.status,

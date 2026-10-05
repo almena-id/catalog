@@ -80,9 +80,11 @@ export default async function OfferPage({
             <ul className="grid gap-1.5 text-sm">
               {offer.form.credentials.map((request) => (
                 <li key={request.key}>
-                  {types.get(request.type)
-                    ? label(types.get(request.type)!.labels, locale)
-                    : request.type}
+                  {request.labels && Object.keys(request.labels).length
+                    ? label(request.labels, locale)
+                    : types.get(request.type)
+                      ? label(types.get(request.type)!.labels, locale)
+                      : request.type}
                   {!request.required && (
                     <span className="text-muted-foreground">
                       {" "}
