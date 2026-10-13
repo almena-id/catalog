@@ -14,16 +14,22 @@ import {
 
 const DAY = 24 * 60 * 60 * 1000;
 
+/** Why an application could not start. */
+export type StartError = "too_many_requests" | "unavailable";
+
 /** Start applying for an offer; this browser keeps the secret for a day. */
 export async function startApplication(
   issuer: string,
   type: string,
-): Promise<{ error: "unavailable" }> {
-  const { data } = await api<{ id: string; secret: string }>("/applications", {
-    method: "POST",
-    body: { issuer, type },
-  });
-  if (!data) return { error: "unavailable" };
+): Promise<{ error: StartError }> {
+  const { data, detail } = await api<{ id: string; secret: string }>(
+    "/applications",
+    { method: "POST", body: { issuer, type } },
+  );
+  if (!data)
+    return {
+      error: detail === "too_many_requests" ? detail : "unavailable",
+    };
   (await cookies()).set(applicationCookie(data.id), data.secret, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

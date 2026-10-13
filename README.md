@@ -28,6 +28,7 @@ Read from the environment or `.env`; [.env.example](.env.example) explains every
 |---|---|---|
 | `NEXT_PUBLIC_CATALOG_WEB_URL` | `https://catalog.almena.id` | Public origin of the portal, for metadata; inlined at build time |
 | `CATALOG_API_URL` | `https://api.almena.id` | The API as the Next.js server reaches it, read at runtime |
+| `CATALOG_PORTAL_SECRET` | — | The secret the API shares with its portals (its `REGISTRY_PORTAL_SECRET`): with it every call names the visitor's address (`X-Almena-Client-IP`, from the edge's `X-Forwarded-For`), so the API's limits per network address count visitors, not this server |
 | `CATALOG_WEB_WELL_KNOWN_DIR` | — | Directory with the origin's `did-configuration.json`, served at `/.well-known/` (off while empty; Compose mounts `./well-known`) |
 | `CATALOG_WEB_PORT` | `3100` | Port of the portal on the host |
 

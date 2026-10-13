@@ -102,6 +102,7 @@
       "file_too_large": "The file is larger than 10 MB.",
       "file_empty": "The file is empty.",
       "gone": "This application is not open in this browser.",
+      "too_many_requests": "Too many applications started from your connection. Try again later.",
       "unavailable": "The registry cannot be reached. Try again in a moment."
     },
     "receiveTitle": "Take it into your wallet",

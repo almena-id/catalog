@@ -1,12 +1,36 @@
 import "server-only";
 
+import { headers } from "next/headers";
+
 const apiUrl = () => process.env.CATALOG_API_URL ?? "https://api.almena.id";
+
+/**
+ * With the secret the API shares with its portals, every call names the
+ * visitor's address (as the edge proxy saw it), so the API's limits per
+ * network address count visitors rather than this server.
+ */
+async function visitor(): Promise<Record<string, string>> {
+  const secret = process.env.CATALOG_PORTAL_SECRET;
+  if (!secret) return {};
+  try {
+    const seen = await headers();
+    const address =
+      seen.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      seen.get("x-real-ip")?.trim();
+    return address
+      ? { "X-Almena-Portal": secret, "X-Almena-Client-IP": address }
+      : {};
+  } catch {
+    // Outside a request (nothing to name).
+    return {};
+  }
+}
 
 /**
  * A call to the API from the server: the public catalogue, and a holder's own
  * application (its secret as a header). `data` is `null` when the API cannot
  * be reached (`status` `null`) or answers with an error; `detail` is the
- * error's code, `failure` its body when it is more than a code.
+ * error's code, `failure` its whole body (what more says why, beside it).
  */
 export async function api<T>(
   path: string,
@@ -32,6 +56,7 @@ export async function api<T>(
         ...(init.form || init.body === undefined
           ? {}
           : { "Content-Type": "application/json" }),
+        ...(await visitor()),
         ...init.headers,
       },
       body:
@@ -46,7 +71,7 @@ export async function api<T>(
       status: response.status,
       data: ok ? (json as T) : null,
       detail: !ok && typeof json?.detail === "string" ? json.detail : null,
-      failure: ok ? undefined : json?.detail,
+      failure: ok ? undefined : json,
     };
   } catch {
     return { status: null, data: null, detail: null };

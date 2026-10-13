@@ -14,5 +14,6 @@ services:
       - ./well-known:/app/well-known:ro
     environment:
       CATALOG_API_URL: ${CATALOG_API_URL:-https://api.almena.id}
+      CATALOG_PORTAL_SECRET: ${CATALOG_PORTAL_SECRET:-}
       # /.well-known/did-configuration.json, from ./well-known.
       CATALOG_WEB_WELL_KNOWN_DIR: /app/well-known

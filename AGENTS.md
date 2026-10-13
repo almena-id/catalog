@@ -35,7 +35,11 @@ before finishing.
   it (QR 3). Every call goes through the server actions in
   `app/lib/application-actions.ts` with the secret as `X-Application-Secret`;
   the wallet requests name this portal as `client_id` (the API's
-  `REGISTRY_CATALOG_URL`). `app/components/FieldInput.tsx` draws each field
+  `REGISTRY_CATALOG_URL`). With `CATALOG_PORTAL_SECRET` (the API's
+  `REGISTRY_PORTAL_SECRET`) every call names the visitor's address
+  (`X-Almena-Client-IP`), so the API's limits per network address count
+  visitors, not the portal (`too_many_requests` on Start).
+  `app/components/FieldInput.tsx` draws each field
   by its catalogue type. The issuer decides and issues in the registry portal.
 - `app/health/route.ts` is the Docker health check: keep it dependency-free.
 - `app/.well-known/`: `security.txt` (RFC 9116, this repository's advisories)

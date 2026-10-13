@@ -102,6 +102,7 @@
       "file_too_large": "El fichero supera los 10 MB.",
       "file_empty": "El fichero está vacío.",
       "gone": "Esta solicitud no está abierta en este navegador.",
+      "too_many_requests": "Demasiadas solicitudes iniciadas desde tu conexión. Inténtalo más tarde.",
       "unavailable": "No se puede contactar con el registro. Inténtalo de nuevo en un momento."
     },
     "receiveTitle": "Guárdala en tu wallet",
