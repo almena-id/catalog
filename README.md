@@ -36,7 +36,8 @@ Read from the environment or `.env`; [.env.example](.env.example) explains every
 
 | | |
 |---|---|
-| `GET /` | The catalog: every published issuer's offers |
+| `GET /` | The catalog: every published issuer's offers, searched by `q` and narrowed by `category` (`/?q=…&category=…`) |
+| `GET /issuers/{slug}` | A published issuer: who it is and everything it offers |
 | `GET /credentials/{issuer}/{type}` | An offer: the issuer, the credential, what its form asks for, and Start |
 | `GET /apply/{id}` | An application this browser started (its secret in a cookie): pair the wallet, present, fill in, sign and send, and once issued receive the credential |
 | `GET /health` | Liveness and the running version, used by the Docker health check |

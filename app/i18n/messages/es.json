@@ -26,7 +26,30 @@
     "unavailable": "No se puede acceder al catálogo ahora mismo. Inténtalo de nuevo en un momento.",
     "loading": "Cargando más…",
     "loadError": "No se pudo cargar el resto del catálogo.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "countOne": "1 servicio",
+    "emptyTitle": "Aún no hay nada publicado",
+    "unavailableTitle": "No se llega al catálogo",
+    "searchLabel": "Buscar en los servicios",
+    "searchPlaceholder": "Busca por credencial, emisor o categoría",
+    "searching": "Buscando…",
+    "clearSearch": "Borrar la búsqueda",
+    "categoriesLabel": "Categorías",
+    "allCategories": "Todas",
+    "noResultsTitle": "Ningún servicio coincide",
+    "noResults": "Nada coincide con «{q}». Prueba con otras palabras u otra categoría.",
+    "noResultsCategory": "Ahora mismo no hay ningún servicio en esta categoría.",
+    "clearFilters": "Quitar filtros"
+  },
+  "issuer": {
+    "kicker": "Emisor",
+    "copyDid": "Copiar el DID",
+    "copied": "Copiado",
+    "since": "Publicado desde el {date}",
+    "offersTitle": "Servicios",
+    "emptyTitle": "Ahora no hay servicios",
+    "empty": "Este emisor no tiene ningún servicio abierto a solicitudes en este momento.",
+    "back": "Ver todos los servicios"
   },
   "apply": {
     "title": "Solicitud",
@@ -109,7 +132,18 @@
     "receiveLead": "Escanea este código con el wallet con el que la solicitaste: solo ese wallet puede recogerla.",
     "inWallet": "Está en tu wallet.",
     "credentialSuspended": "{issuer} ha suspendido esta credencial: los verificadores la rechazan por ahora.",
-    "credentialRevoked": "{issuer} ha revocado esta credencial: los verificadores ya no la aceptan."
+    "credentialRevoked": "{issuer} ha revocado esta credencial: los verificadores ya no la aceptan.",
+    "steps": {
+      "label": "Pasos de tu solicitud",
+      "pair": "Vincular la wallet",
+      "present": "Presentar credenciales",
+      "fill": "Rellenar",
+      "submit": "Firmar y enviar",
+      "receive": "Recibir",
+      "done": "hecho",
+      "progress": "Paso {n} de {total}: {step}",
+      "complete": "Listo: la credencial está en tu wallet."
+    }
   },
   "wallet": {
     "qr": "Código para el wallet de Almena",

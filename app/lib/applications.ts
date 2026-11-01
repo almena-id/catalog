@@ -9,6 +9,7 @@ import type {
   CredentialRequest,
   FormField,
 } from "./form-fields";
+import type { Category } from "./offers";
 import type { Texts } from "./texts";
 
 /** What an issued credential's status is, as its issuer's list says. */
@@ -29,6 +30,8 @@ export type Offer = {
     did: string;
   };
   credential_type: CredentialType;
+  /** The credential type's category, named and with its icon. */
+  category: Category;
   form: {
     slug: string;
     name: Texts;

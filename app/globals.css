@@ -216,3 +216,19 @@
   width: 100%;
   height: auto;
 }
+
+/* ----------------------------------------------------------------- hero */
+
+/* Behind a hero only: a dot grid in the brand's tint, fading out from the
+   top right, over the identity's soft light. */
+.hero-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle, color-mix(in oklab, var(--primary) 30%, transparent) 1.2px, transparent 1.6px) 0 0 / 18px 18px,
+    radial-gradient(70% 90% at 85% 20%, var(--brand-glow), transparent 70%);
+  mask-image: radial-gradient(120% 100% at 80% 10%, black 25%, transparent 75%);
+  pointer-events: none;
+}

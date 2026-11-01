@@ -26,7 +26,30 @@
     "unavailable": "The catalog cannot be reached right now. Try again in a moment.",
     "loading": "Loading more…",
     "loadError": "The rest of the catalog could not be loaded.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "countOne": "1 service",
+    "emptyTitle": "Nothing published yet",
+    "unavailableTitle": "The catalog is out of reach",
+    "searchLabel": "Search the services",
+    "searchPlaceholder": "Search by credential, issuer or category",
+    "searching": "Searching…",
+    "clearSearch": "Clear the search",
+    "categoriesLabel": "Categories",
+    "allCategories": "All",
+    "noResultsTitle": "No services match",
+    "noResults": "Nothing matches “{q}”. Try other words, or another category.",
+    "noResultsCategory": "No service is filed under this category right now.",
+    "clearFilters": "Clear filters"
+  },
+  "issuer": {
+    "kicker": "Issuer",
+    "copyDid": "Copy the DID",
+    "copied": "Copied",
+    "since": "Published since {date}",
+    "offersTitle": "Services",
+    "emptyTitle": "No services right now",
+    "empty": "This issuer has no service open for applications at the moment.",
+    "back": "See all the services"
   },
   "apply": {
     "title": "Application",
@@ -109,7 +132,18 @@
     "receiveLead": "Scan this code with the wallet you applied with: only that wallet can take it.",
     "inWallet": "It is in your wallet.",
     "credentialSuspended": "{issuer} has suspended this credential: verifiers refuse it for now.",
-    "credentialRevoked": "{issuer} has revoked this credential: verifiers no longer accept it."
+    "credentialRevoked": "{issuer} has revoked this credential: verifiers no longer accept it.",
+    "steps": {
+      "label": "Steps of your application",
+      "pair": "Pair the wallet",
+      "present": "Present credentials",
+      "fill": "Fill in",
+      "submit": "Sign and send",
+      "receive": "Receive",
+      "done": "done",
+      "progress": "Step {n} of {total}: {step}",
+      "complete": "All done: the credential is in your wallet."
+    }
   },
   "wallet": {
     "qr": "Code for the Almena wallet",

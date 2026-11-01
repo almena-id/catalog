@@ -14,6 +14,7 @@ import type { FileMeta, HolderApplication } from "@/app/lib/applications";
 import { label, type Labels } from "@/app/lib/form-fields";
 import { hasText } from "@/app/lib/texts";
 import { ApplicationWallet } from "./ApplicationWallet";
+import { Stepper } from "./Stepper";
 import { FieldInput, type Domains } from "@/app/components/FieldInput";
 
 /** A value from a credential as a person reads it. */
@@ -87,8 +88,12 @@ export function Apply({
   const [submitting, setSubmitting] = useState(false);
   const typeName = label(offer.credential_type.labels, locale);
 
+  const stepper = <Stepper application={application} submitting={submitting} />;
+
   if (status !== "open" && status !== "paired")
     return (
+      <div className="grid gap-5">
+      {stepper}
       <Card className="gap-3 p-6">
         <h2 className="flex items-center gap-2 text-lg font-semibold">
           <CheckCircle2Icon className="size-5 text-primary" />
@@ -137,6 +142,7 @@ export function Apply({
           )}
         <p className="font-mono text-[12px] text-faint">{application.slug}</p>
       </Card>
+      </div>
     );
 
   const presented = new Map(application.presented.map((p) => [p.key, p]));
@@ -172,6 +178,7 @@ export function Apply({
 
   return (
     <div className="grid gap-5">
+      {stepper}
       <Step number={1} title={copy.pairTitle} done={status === "paired"}>
         {status === "open" ? (
           <>

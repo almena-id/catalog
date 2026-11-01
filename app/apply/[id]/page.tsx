@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { issuerHref } from "@/app/components/OfferTile";
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
 import { Button } from "@/app/components/ui/button";
 import { getI18n } from "@/app/i18n/server";
@@ -48,9 +49,12 @@ export default async function ApplyPage({ params }: PageProps<"/apply/[id]">) {
   return (
     <div className="mx-auto grid w-full max-w-[720px] gap-6">
       <header>
-        <p className="text-[13px] font-semibold text-muted-foreground">
+        <Link
+          href={issuerHref(offer.issuer.slug)}
+          className="text-[13px] font-semibold text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+        >
           {offer.issuer.name}
-        </p>
+        </Link>
         <h1 className="text-[28px] font-bold tracking-tight">
           {label(offer.credential_type.labels, locale)}
         </h1>

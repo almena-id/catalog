@@ -1,15 +1,12 @@
 "use client";
 
-import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Badge } from "@/app/components/ui/badge";
+import { OfferTile } from "@/app/components/OfferTile";
 import { Button } from "@/app/components/ui/button";
-import { Card } from "@/app/components/ui/card";
 import { useI18n } from "@/app/i18n/client";
 import { loadOffers } from "@/app/lib/offer-actions";
-import type { Offer, OfferPage } from "@/app/lib/offers";
+import type { Offer, OfferFilters, OfferPage } from "@/app/lib/offers";
 import { label } from "@/app/lib/texts";
 
 const keyOf = (offer: Offer) => `${offer.issuer.slug}/${offer.credential_type.id}`;
@@ -17,9 +14,16 @@ const keyOf = (offer: Offer) => `${offer.issuer.slug}/${offer.credential_type.id
 /**
  * The offers, each opening its own page, where the application starts. The grid keeps going as it is
  * scrolled: when the marker under it comes near the viewport, the next page
- * is asked for with the cursor the previous one ended on.
+ * is asked for with the cursor the previous one ended on and the same filters
+ * (the page renders a new grid, by its key, when the filters change).
  */
-export function OfferGrid({ initial }: { initial: OfferPage }) {
+export function OfferGrid({
+  initial,
+  filters,
+}: {
+  initial: OfferPage;
+  filters: OfferFilters;
+}) {
   const { t, locale } = useI18n();
   const copy = t.home;
   const [offers, setOffers] = useState(initial.items);
@@ -28,12 +32,13 @@ export function OfferGrid({ initial }: { initial: OfferPage }) {
   const [failed, setFailed] = useState(false);
   const marker = useRef<HTMLDivElement>(null);
   const busy = useRef(false);
+  const { q, category } = filters;
 
   const next = useCallback(async () => {
     if (!cursor || busy.current) return;
     busy.current = true;
     setLoading(true);
-    const page = await loadOffers(cursor).catch(() => null);
+    const page = await loadOffers(cursor, { q, category }).catch(() => null);
     if (page) {
       // An issuer published meanwhile can shift the pages: never show one twice.
       setOffers((shown) => {
@@ -47,7 +52,7 @@ export function OfferGrid({ initial }: { initial: OfferPage }) {
     }
     setLoading(false);
     busy.current = false;
-  }, [cursor]);
+  }, [cursor, q, category]);
 
   useEffect(() => {
     const node = marker.current;
@@ -64,32 +69,23 @@ export function OfferGrid({ initial }: { initial: OfferPage }) {
 
   return (
     <div className="grid gap-3">
-      <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {offers.map((offer) => {
           const kind = offer.credential_type;
           return (
             <li key={keyOf(offer)}>
-              <Link
-                href={`/credentials/${encodeURIComponent(offer.issuer.slug)}/${encodeURIComponent(kind.id)}`}
-                className="group block h-full rounded-2xl outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              >
-                <Card className="h-full gap-2 p-5 transition-colors hover:bg-accent">
-                  <Badge variant="brand" className="justify-self-start">
-                    {label(kind.category.labels, locale)}
-                  </Badge>
-                  <span className="text-lg font-semibold">{label(kind.labels, locale)}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {copy.by.replace("{issuer}", offer.issuer.name)}
-                  </span>
-                  <span className="text-[13px] text-faint">
-                    {label(kind.descriptions, locale)}
-                  </span>
-                  <span className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-medium text-primary">
-                    {copy.apply}
-                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Card>
-              </Link>
+              <OfferTile
+                issuer={offer.issuer}
+                type={kind.id}
+                typeName={label(kind.labels, locale)}
+                description={label(kind.descriptions, locale)}
+                category={{
+                  label: label(kind.category.labels, locale),
+                  icon: kind.category.icon,
+                }}
+                byLabel={copy.by}
+                applyLabel={copy.apply}
+              />
             </li>
           );
         })}

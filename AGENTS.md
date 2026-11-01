@@ -26,13 +26,42 @@ before finishing.
   it grants with a request form, already named and categorised by the API),
   a page at a time as it is scrolled (`app/lib/offers.ts`,
   `app/lib/offer-actions.ts`, `app/OfferGrid.tsx`), each opening its page.
+  Above them a hero with the search box, and the categories with offers as
+  chips (`GET /catalog/offers/categories`, each with its icon and count, and
+  "All") (`app/CatalogSearch.tsx`). The filters live in the URL (`/?q=…&category=…`):
+  the page renders their first page, typing replaces the URL a moment (300 ms)
+  after the last key, and the grid asks for the next pages with the same
+  filters beside the cursor; a new filter is a new grid (its `key`).
+- `/issuers/{slug}` is a published issuer (`GET /catalog/issuers/{slug}/offers`):
+  its initials in a tinted square (issuers have no logo), name, description,
+  DID with a copy button (`CopyButton`), since when it is published, and its
+  offers; an unknown one is Next's not found. The issuer's name on an offer's
+  tile, on its page and on an application links there.
+- An offer is drawn as its credential, a physical card: `CredentialCard`
+  (`app/components`; ID-1 proportions, the identity's gradient with
+  guilloché arcs and the mark as a watermark, the category's icon and name,
+  the type and its issuer; `full` or `compact`, `children` a status chip at
+  the bottom right). `OfferTile` is an offer in a grid (the compact card, the
+  issuer — not on its own page —, the description and "Apply"), on `/` and
+  on an issuer's page; the offer's page has the full card as its hero. A category's icon is a lucide
+  name the API serves (`icon`), drawn through `app/lib/category-icons.ts`
+  (`CategoryIcon`, `categoryIcon`), the tag for one it does not know.
+- Illustrations are hand-made inline SVG components in
+  `app/components/illustrations` (the hero's wallet, no offers yet, the API
+  out of reach, no results), coloured only with the theme's tokens (Tailwind
+  `fill-*`/`stroke-*` classes or `var(--…)`) so they follow light and dark,
+  and decorative (`aria-hidden`); `EmptyState` frames one with its title,
+  text and action. `.hero-backdrop` (`app/globals.css`) is the dot grid in the
+  brand's tint, faded from the top right, behind a hero only.
 - Applying happens here, with no account: `/credentials/{issuer}/{type}` is
   an offer (`GET /catalog/issuers/{slug}/offers/{type}`: the issuer, the
   credential and its form) and Start (`POST /applications`) keeps the
   application's secret in an HTTP-only cookie (`almena.application.{id}`, a
   day) and opens `/apply/{id}`: pair the wallet (QR 1), present credentials,
   fill in the fields and files, sign and send (QR 2), and once issued receive
-  it (QR 3). Every call goes through the server actions in
+  it (QR 3) — the stepper above (`app/apply/[id]/Stepper.tsx`, an icon per
+  step, presenting only when the form asks for credentials) shows where it
+  stands. Every call goes through the server actions in
   `app/lib/application-actions.ts` with the secret as `X-Application-Secret`;
   the wallet requests name this portal as `client_id` (the API's
   `REGISTRY_CATALOG_URL`). With `CATALOG_PORTAL_SECRET` (the API's
