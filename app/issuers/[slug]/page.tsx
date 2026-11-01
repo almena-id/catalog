@@ -9,6 +9,7 @@ import { EmptyCatalog } from "@/app/components/illustrations/EmptyCatalog";
 import { Unreachable } from "@/app/components/illustrations/Unreachable";
 import { OfferTile } from "@/app/components/OfferTile";
 import { Button } from "@/app/components/ui/button";
+import { VerifiedDomains } from "@/app/components/VerifiedDomains";
 import { getI18n } from "@/app/i18n/server";
 import { initials } from "@/app/lib/initials";
 import { fetchIssuerOffers } from "@/app/lib/offers";
@@ -23,8 +24,8 @@ export async function generateMetadata({
 }
 
 /**
- * Public: a published issuer — who it is (its initials, name, description and
- * DID, since when it is published) and everything it offers, as the catalog
+ * Public: a published issuer — who it is (its initials, name, description,
+ * the domains its tenant has proved, DID, since when it is published) and everything it offers, as the catalog
  * shows them.
  */
 export default async function IssuerPage({
@@ -82,6 +83,7 @@ export default async function IssuerPage({
               {label(issuer.description ?? {}, locale)}
             </p>
           )}
+          <VerifiedDomains domains={issuer.domains} label={copy.domains} />
           <p className="flex items-center gap-1 font-mono text-[12px] text-faint">
             <span className="break-all">{issuer.did}</span>
             <CopyButton

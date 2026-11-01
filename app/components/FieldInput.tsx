@@ -31,6 +31,11 @@ export type Domains = Record<string, Code[]>;
 
 const small = "text-[13px] text-muted-foreground font-normal";
 
+/** A size in whole megabytes (10485760 → "10 MB"). */
+export function megabytes(bytes: number): string {
+  return `${Math.max(1, Math.round(bytes / (1024 * 1024)))} MB`;
+}
+
 /** The codes a field offers: its own, or its domain's, as the form narrows them. */
 function codesFor(field: CatalogueField, narrow: Narrow, domains: Domains) {
   let codes =
@@ -61,9 +66,12 @@ export function FieldInput({
   error,
   file,
   onFile,
+  maxBytes,
 }: {
   id: string;
   applicationId: string;
+  /** A file field: the most that may be uploaded, as the API says. */
+  maxBytes?: number;
   field: CatalogueField;
   narrow: Narrow;
   required: boolean;
@@ -179,6 +187,7 @@ export function FieldInput({
           .join(",")}
         file={file}
         onFile={(meta) => onFile?.(meta)}
+        maxBytes={maxBytes}
       />
     );
 
@@ -287,8 +296,10 @@ function FileInput({
   accept,
   file,
   onFile,
+  maxBytes,
 }: {
   id: string;
+  maxBytes?: number;
   /** The form's key for the field: what the upload answers. */
   fileKey: string;
   applicationId: string;
@@ -302,6 +313,7 @@ function FileInput({
   const copy = t.apply;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [most, setMost] = useState<number | undefined>(maxBytes);
 
   return (
     <Field className="gap-1.5">
@@ -338,23 +350,33 @@ function FileInput({
           onChange={async (event) => {
             const chosen = event.target.files?.[0];
             if (!chosen) return;
-            setBusy(true);
             setError(null);
+            // Refused here before it is sent; the API checks it again.
+            if (maxBytes && chosen.size > maxBytes) {
+              setError("file_too_large");
+              return;
+            }
+            setBusy(true);
             const form = new FormData();
             form.set("key", key);
             form.set("file", chosen);
             const result = await uploadApplicationFile(applicationId, form);
             setBusy(false);
             if (result.ok) onFile(result.file);
-            else setError(result.error);
+            else {
+              if (result.maxBytes) setMost(result.maxBytes);
+              setError(result.error);
+            }
           }}
         />
       )}
       {busy && <p className="text-[13px] text-faint">{copy.uploading}</p>}
       {error && (
         <FieldError className="text-[13px]">
-          {copy.errors[error as keyof typeof copy.errors] ??
-            copy.errors.unavailable}
+          {error === "file_too_large" && most
+            ? copy.errors.file_too_large_size.replace("{size}", megabytes(most))
+            : (copy.errors[error as keyof typeof copy.errors] ??
+              copy.errors.unavailable)}
         </FieldError>
       )}
       {foot}

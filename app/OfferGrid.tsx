@@ -12,10 +12,13 @@ import { label } from "@/app/lib/texts";
 const keyOf = (offer: Offer) => `${offer.issuer.slug}/${offer.credential_type.id}`;
 
 /**
- * The offers, each opening its own page, where the application starts. The grid keeps going as it is
- * scrolled: when the marker under it comes near the viewport, the next page
- * is asked for with the cursor the previous one ended on and the same filters
- * (the page renders a new grid, by its key, when the filters change).
+ * The offers, each opening its own page, where the application starts. The
+ * next page is asked for with the cursor the previous one ended on and the
+ * same filters (the page renders a new grid, by its key, when the filters
+ * change): by the "Load more" button under it, and as it is scrolled, when
+ * the marker under it comes near the viewport — but not while the focus is
+ * on one of its offers, so a keyboard going through them reaches the button
+ * and the footer instead of pushing them away.
  */
 export function OfferGrid({
   initial,
@@ -31,6 +34,7 @@ export function OfferGrid({
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const marker = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLUListElement>(null);
   const busy = useRef(false);
   const { q, category } = filters;
 
@@ -59,6 +63,7 @@ export function OfferGrid({
     if (!node || !cursor || failed) return;
     const observer = new IntersectionObserver(
       (entries) => {
+        if (list.current?.contains(document.activeElement)) return;
         if (entries.some((entry) => entry.isIntersecting)) void next();
       },
       { rootMargin: "400px 0px" },
@@ -69,7 +74,10 @@ export function OfferGrid({
 
   return (
     <div className="grid gap-3">
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+      <ul
+        ref={list}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+      >
         {offers.map((offer) => {
           const kind = offer.credential_type;
           return (
@@ -110,6 +118,17 @@ export function OfferGrid({
           </span>
         )}
       </div>
+      {cursor && !failed && (
+        <Button
+          type="button"
+          variant="outline"
+          className="justify-self-center"
+          disabled={loading}
+          onClick={() => void next()}
+        >
+          {copy.loadMore}
+        </Button>
+      )}
     </div>
   );
 }

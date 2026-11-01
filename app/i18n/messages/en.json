@@ -25,6 +25,7 @@
     "empty": "No issuer has published a service yet.",
     "unavailable": "The catalog cannot be reached right now. Try again in a moment.",
     "loading": "Loading more…",
+    "loadMore": "Load more",
     "loadError": "The rest of the catalog could not be loaded.",
     "retry": "Try again",
     "countOne": "1 service",
@@ -45,6 +46,7 @@
     "kicker": "Issuer",
     "copyDid": "Copy the DID",
     "copied": "Copied",
+    "domains": "Verified domains",
     "since": "Published since {date}",
     "offersTitle": "Services",
     "emptyTitle": "No services right now",
@@ -79,7 +81,7 @@
     "back": "Back to the form",
     "submitTitle": "Sign and send",
     "submitLead": "Scan this code: your wallet shows everything you send to {issuer}; sign it there to send it.",
-    "gone": "This application is not open in this browser, or it expired: an application not sent within a day is removed.",
+    "gone": "This application is not open in this browser, or it has expired: one not sent within a day is removed, and a sent one can be opened here until a while after its latest step (sent, decided, issued).",
     "toCatalogue": "See the credentials",
     "status": {
       "open": "Started",
@@ -122,11 +124,12 @@
       "application_not_paired": "Pair your wallet first.",
       "nothing_to_present": "This form asks for no credentials.",
       "file_type_invalid": "That kind of file is not accepted here.",
-      "file_too_large": "The file is larger than 10 MB.",
+      "file_too_large": "The file is larger than this form allows.",
+      "file_too_large_size": "The file is larger than {size}, the most this form allows.",
       "file_empty": "The file is empty.",
       "gone": "This application is not open in this browser.",
       "too_many_requests": "Too many applications started from your connection. Try again later.",
-      "unavailable": "The registry cannot be reached. Try again in a moment."
+      "unavailable": "The catalog cannot be reached right now. Try again in a moment."
     },
     "receiveTitle": "Take it into your wallet",
     "receiveLead": "Scan this code with the wallet you applied with: only that wallet can take it.",
@@ -145,6 +148,18 @@
       "complete": "All done: the credential is in your wallet."
     }
   },
+  "applications": {
+    "title": "My applications",
+    "nav": "My applications",
+    "lead": "The applications started in this browser and still open here. Each one is kept only in this browser, until a while after its latest step.",
+    "emptyTitle": "No applications here",
+    "empty": "No application started in this browser is open: start one from a service in the catalog.",
+    "open": "Open",
+    "unavailable": "Some applications could not be read right now. Try again in a moment.",
+    "sent": "Sent on {date}",
+    "notSent": "Not sent yet",
+    "navLabel": "Site"
+  },
   "wallet": {
     "qr": "Code for the Almena wallet",
     "open": "Open in the wallet",
@@ -152,6 +167,6 @@
     "expiresIn": "The code expires in {time}.",
     "expired": "The code has expired.",
     "retry": "New code",
-    "failed": "The registry cannot be reached. Try again in a moment."
+    "failed": "The catalog cannot be reached right now. Try again in a moment."
   }
 }

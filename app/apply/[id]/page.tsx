@@ -17,9 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * An application this browser started (its secret is in a cookie): who it
- * goes to and for what, then its steps (`Apply`). Anyone else, or after a
- * day unsubmitted, finds it gone.
+ * An application this browser started (its secret is in a cookie, kept as
+ * long as the API says it can be opened): who it goes to and for what, then
+ * its steps (`Apply`). Anyone else finds it gone, and so does its holder
+ * once it expires: a day unsent, or, once sent, the API's days after its
+ * latest step (sent, decided, issued, received).
  */
 export default async function ApplyPage({ params }: PageProps<"/apply/[id]">) {
   const { id } = await params;

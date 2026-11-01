@@ -30,8 +30,8 @@ task --list  # everything else
   (`app/i18n/messages/*.json`), in English and Spanish at least.
 - Never put secrets in `NEXT_PUBLIC_*` variables: they are shipped to every
   browser.
-- Before sending a change, `task check` must pass: ESLint, TypeScript and a
-  production build.
+- Before sending a change, `task check` must pass: ESLint, TypeScript, the
+  unit tests (Vitest, `task test`) and a production build.
 
 ## Pull requests
 

@@ -25,6 +25,7 @@
     "empty": "Ningún emisor ha publicado un servicio todavía.",
     "unavailable": "No se puede acceder al catálogo ahora mismo. Inténtalo de nuevo en un momento.",
     "loading": "Cargando más…",
+    "loadMore": "Cargar más",
     "loadError": "No se pudo cargar el resto del catálogo.",
     "retry": "Reintentar",
     "countOne": "1 servicio",
@@ -45,6 +46,7 @@
     "kicker": "Emisor",
     "copyDid": "Copiar el DID",
     "copied": "Copiado",
+    "domains": "Dominios verificados",
     "since": "Publicado desde el {date}",
     "offersTitle": "Servicios",
     "emptyTitle": "Ahora no hay servicios",
@@ -79,7 +81,7 @@
     "back": "Volver al formulario",
     "submitTitle": "Firma y envía",
     "submitLead": "Escanea este código: tu wallet te enseña todo lo que envías a {issuer}; fírmalo allí para enviarlo.",
-    "gone": "Esta solicitud no está abierta en este navegador, o ha caducado: una solicitud que no se envía en un día se borra.",
+    "gone": "Esta solicitud no está abierta en este navegador, o ha caducado: una que no se envía en un día se borra, y una enviada se puede abrir aquí hasta un tiempo después de su último paso (envío, decisión, emisión).",
     "toCatalogue": "Ver las credenciales",
     "status": {
       "open": "Empezada",
@@ -122,11 +124,12 @@
       "application_not_paired": "Empareja antes tu wallet.",
       "nothing_to_present": "Este formulario no pide credenciales.",
       "file_type_invalid": "Aquí no se acepta ese tipo de fichero.",
-      "file_too_large": "El fichero supera los 10 MB.",
+      "file_too_large": "El fichero es más grande de lo que admite este formulario.",
+      "file_too_large_size": "El fichero supera los {size} que admite este formulario.",
       "file_empty": "El fichero está vacío.",
       "gone": "Esta solicitud no está abierta en este navegador.",
       "too_many_requests": "Demasiadas solicitudes iniciadas desde tu conexión. Inténtalo más tarde.",
-      "unavailable": "No se puede contactar con el registro. Inténtalo de nuevo en un momento."
+      "unavailable": "No se puede acceder al catálogo ahora mismo. Inténtalo de nuevo en un momento."
     },
     "receiveTitle": "Guárdala en tu wallet",
     "receiveLead": "Escanea este código con el wallet con el que la solicitaste: solo ese wallet puede recogerla.",
@@ -145,6 +148,18 @@
       "complete": "Listo: la credencial está en tu wallet."
     }
   },
+  "applications": {
+    "title": "Mis solicitudes",
+    "nav": "Mis solicitudes",
+    "lead": "Las solicitudes empezadas en este navegador que siguen abiertas aquí. Cada una se guarda solo en este navegador, hasta un tiempo después de su último paso.",
+    "emptyTitle": "No hay solicitudes aquí",
+    "empty": "No hay ninguna solicitud empezada en este navegador abierta: empieza una desde un servicio del catálogo.",
+    "open": "Abrir",
+    "unavailable": "Algunas solicitudes no se han podido leer ahora mismo. Inténtalo de nuevo en un momento.",
+    "sent": "Enviada el {date}",
+    "notSent": "Aún sin enviar",
+    "navLabel": "Sitio"
+  },
   "wallet": {
     "qr": "Código para el wallet de Almena",
     "open": "Abrir en el wallet",
@@ -152,6 +167,6 @@
     "expiresIn": "El código caduca en {time}.",
     "expired": "El código ha caducado.",
     "retry": "Código nuevo",
-    "failed": "No se puede contactar con el registro. Inténtalo de nuevo en un momento."
+    "failed": "No se puede acceder al catálogo ahora mismo. Inténtalo de nuevo en un momento."
   }
 }

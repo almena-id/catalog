@@ -18,6 +18,8 @@ export type OfferIssuer = {
   /** By language. */
   description: Texts | null;
   did: string;
+  /** The domains its tenant has proved by DNS, oldest first (`verifiedDomains`). */
+  domains?: string[];
 };
 
 /** A service in the catalog: a credential type an issuer grants on request. */

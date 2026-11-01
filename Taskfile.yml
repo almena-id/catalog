@@ -57,6 +57,12 @@ tasks:
       # generates them first.
       - npm run --silent typecheck
 
+  test:
+    desc: Run the unit tests (Vitest, app/**/*.test.ts)
+    deps: [install]
+    cmds:
+      - npm run --silent test
+
   fmt:
     desc: Apply ESLint's automatic fixes
     deps: [install]
@@ -64,9 +70,10 @@ tasks:
       - npm run --silent lint -- --fix
 
   check:
-    desc: Everything that must pass before finishing a change (lint + production build)
+    desc: Everything that must pass before finishing a change (lint, unit tests, production build)
     cmds:
       - task: lint
+      - task: test
       - task: build
 
   docker:build:

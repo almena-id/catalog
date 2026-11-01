@@ -5,6 +5,21 @@ import { headers } from "next/headers";
 const apiUrl = () => process.env.CATALOG_API_URL ?? "https://api.almena.id";
 
 /**
+ * The visitor's address, as the edge proxy in front (Caddy) saw it: the last
+ * `X-Forwarded-For` entry, the one that proxy added. Whatever comes before it
+ * the client sent itself and may have forged; `X-Real-IP` when there is none.
+ */
+export function clientAddress(seen: Headers): string | undefined {
+  const forwarded = seen
+    .get("x-forwarded-for")
+    ?.split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .at(-1);
+  return forwarded || seen.get("x-real-ip")?.trim() || undefined;
+}
+
+/**
  * With the secret the API shares with its portals, every call names the
  * visitor's address (as the edge proxy saw it), so the API's limits per
  * network address count visitors rather than this server.
@@ -13,10 +28,7 @@ async function visitor(): Promise<Record<string, string>> {
   const secret = process.env.CATALOG_PORTAL_SECRET;
   if (!secret) return {};
   try {
-    const seen = await headers();
-    const address =
-      seen.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      seen.get("x-real-ip")?.trim();
+    const address = clientAddress(await headers());
     return address
       ? { "X-Almena-Portal": secret, "X-Almena-Client-IP": address }
       : {};

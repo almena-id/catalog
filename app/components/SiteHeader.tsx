@@ -5,7 +5,8 @@ import { Logo } from "./Logo";
 
 /**
  * The bar across the top, 56px tall in every portal (room for the registry's
- * 32px controls) so the brand sits at the same height in all of them.
+ * 32px controls) so the brand sits at the same height in all of them; on
+ * the right, the way to this browser's applications.
  */
 export function SiteHeader({ t }: { t: Dictionary }) {
   return (
@@ -21,6 +22,14 @@ export function SiteHeader({ t }: { t: Dictionary }) {
             Almena <strong className="font-semibold">Catalog</strong>
           </span>
         </Link>
+        <nav className="ml-auto" aria-label={t.applications.navLabel}>
+          <Link
+            href="/applications"
+            className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            {t.applications.nav}
+          </Link>
+        </nav>
       </div>
     </header>
   );

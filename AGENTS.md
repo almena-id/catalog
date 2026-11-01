@@ -24,8 +24,10 @@ before finishing.
   portal only reads to name things.
 - `/` lists every published issuer's offers (`GET /catalog/offers`, a type
   it grants with a request form, already named and categorised by the API),
-  a page at a time as it is scrolled (`app/lib/offers.ts`,
-  `app/lib/offer-actions.ts`, `app/OfferGrid.tsx`), each opening its page.
+  a page at a time (`app/lib/offers.ts`, `app/lib/offer-actions.ts`,
+  `app/OfferGrid.tsx`), each opening its page: by a visible "Load more"
+  button, and as it is scrolled — but not while the focus is on an offer, so
+  the keyboard reaches the button and the footer.
   Above them a hero with the search box, and the categories with offers as
   chips (`GET /catalog/offers/categories`, each with its icon and count, and
   "All") (`app/CatalogSearch.tsx`). The filters live in the URL (`/?q=…&category=…`):
@@ -34,8 +36,9 @@ before finishing.
   filters beside the cursor; a new filter is a new grid (its `key`).
 - `/issuers/{slug}` is a published issuer (`GET /catalog/issuers/{slug}/offers`):
   its initials in a tinted square (issuers have no logo), name, description,
-  DID with a copy button (`CopyButton`), since when it is published, and its
-  offers; an unknown one is Next's not found. The issuer's name on an offer's
+  the domains its tenant has proved by DNS (`VerifiedDomains`, plain text,
+  never links; also on an offer's page), DID with a copy button
+  (`CopyButton`), since when it is published, and its offers; an unknown one is Next's not found. The issuer's name on an offer's
   tile, on its page and on an application links there.
 - An offer is drawn as its credential, a physical card: `CredentialCard`
   (`app/components`; ID-1 proportions, the identity's gradient with
@@ -56,26 +59,59 @@ before finishing.
 - Applying happens here, with no account: `/credentials/{issuer}/{type}` is
   an offer (`GET /catalog/issuers/{slug}/offers/{type}`: the issuer, the
   credential and its form) and Start (`POST /applications`) keeps the
-  application's secret in an HTTP-only cookie (`almena.application.{id}`, a
-  day) and opens `/apply/{id}`: pair the wallet (QR 1), present credentials,
+  application's secret in an HTTP-only cookie (`almena.application.{id}`)
+  and opens `/apply/{id}`. The cookie ends when the API says the application
+  does (its `expires_at`: a day unsent; once sent, the API's
+  `REGISTRY_APPLICATION_HOLDER_DAYS` after its latest step), and is brought up
+  to date (`keepApplication`) whenever the page opens and the wallet answers,
+  so a holder whose application is decided by hand days later can still come
+  back to take the credential. On `/apply/{id}`: pair the wallet (QR 1), present credentials,
   fill in the fields and files, sign and send (QR 2), and once issued receive
   it (QR 3) — the stepper above (`app/apply/[id]/Stepper.tsx`, an icon per
   step, presenting only when the form asks for credentials) shows where it
-  stands. Every call goes through the server actions in
+  stands. Once sent, the page follows it by itself (`applicationStatus`,
+  `app/lib/status-poll.ts`): while the issuer has it (sent, accepted) it
+  looks again after 5 s, twice as long each time up to a minute, never while
+  the page is hidden, and reloads once the status moves. Every QR code is
+  `app/components/WalletQr.tsx` (as the registry draws them): the code, the
+  "Open in the wallet" link, the wait as a live region and the countdown
+  outside it. A wallet link is only drawn or put in an `href` when its scheme
+  is `almena:` or `https:` (`app/lib/deep-link.ts`, checked in `askWallet`
+  and again in `WalletQr`). `/applications` (linked from the header) lists
+  this browser's applications — one per `almena.application.*` cookie, each
+  read with its secret (`fetchMyApplications`), the latest step first, those
+  the API no longer opens left out — with the offer, the status and the way
+  back to `/apply/{id}`. Every call goes through the server actions in
   `app/lib/application-actions.ts` with the secret as `X-Application-Secret`;
   the wallet requests name this portal as `client_id` (the API's
   `REGISTRY_CATALOG_URL`). With `CATALOG_PORTAL_SECRET` (the API's
   `REGISTRY_PORTAL_SECRET`) every call names the visitor's address
-  (`X-Almena-Client-IP`), so the API's limits per network address count
+  (`X-Almena-Client-IP`: the last `X-Forwarded-For` entry, the one the edge
+  proxy added — the earlier ones the client may forge —, else `X-Real-IP`), so the API's limits per network address count
   visitors, not the portal (`too_many_requests` on Start).
   `app/components/FieldInput.tsx` draws each field
   by its catalogue type. The issuer decides and issues in the registry portal.
+- Tests: unit tests next to what they test (`app/**/*.test.ts`, Vitest,
+  `vitest.config.mts`, `task test`; `test/setup.ts` mocks Next's headers,
+  cookies and redirect over the request in `test/next.ts`, `server-only` is
+  an empty module) — the `lib/` helpers and the server actions with `fetch`
+  stubbed: what each sends (the secret, the visitor's address), the cookie it
+  keeps and how a refusal comes back. A new server action, or a new refusal
+  it words, comes with its unit test.
 - `app/health/route.ts` is the Docker health check: keep it dependency-free.
 - `app/.well-known/`: `security.txt` (RFC 9116, this repository's advisories)
   and `did-configuration.json`, read as it is from `CATALOG_WEB_WELL_KNOWN_DIR`:
   the Domain Linkage Credential tying this origin to `did:web:almena.id` is
   signed elsewhere, the portal holds no key.
 - `output: "standalone"` in `next.config.ts` is what the Dockerfile ships.
+- Security headers (`app/lib/security-headers.ts`): `proxy.ts` gives every
+  page a Content Security Policy with a nonce of its own (Next marks its
+  scripts with it; `strict-dynamic`, `frame-ancestors 'none'`, `data:`
+  images, self-hosted fonts, inline styles for server-rendered `style`
+  attributes, `unsafe-eval` only in development), and `next.config.ts` adds
+  `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and
+  `Permissions-Policy` to every response. A new origin the pages load from
+  goes in the policy, with its test.
 - User-facing text is translatable: English (`en`) is the source and fallback,
   Spanish (`es`) the first translation (`app/i18n/messages/*.json`). No
   hard-coded user-facing strings. The language is the selector's choice

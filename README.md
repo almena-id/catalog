@@ -46,7 +46,7 @@ Read from the environment or `.env`; [.env.example](.env.example) explains every
 
 ## Development
 
-`task --list` shows every task. Before sending a change, `task check` (ESLint, TypeScript and a production build) must pass; see [CONTRIBUTING.md](CONTRIBUTING.md). This Next.js version differs from older ones: [AGENTS.md](AGENTS.md) points to the documentation bundled in `node_modules/next/dist/docs/`.
+`task --list` shows every task. Before sending a change, `task check` (ESLint, TypeScript, the unit tests and a production build) must pass: `task test` runs the unit tests alone (Vitest, `app/**/*.test.ts`); see [CONTRIBUTING.md](CONTRIBUTING.md). This Next.js version differs from older ones: [AGENTS.md](AGENTS.md) points to the documentation bundled in `node_modules/next/dist/docs/`.
 
 ## Contributing and security
 

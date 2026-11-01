@@ -19,7 +19,12 @@ export type CredentialStatus = "valid" | "suspended" | "revoked";
 export const applicationCookie = (id: string) => `almena.application.${id}`;
 
 /** A form field as an offer shows it: the form's settings and its definition. */
-export type OfferField = FormField & { key: string; field: CatalogueField };
+export type OfferField = FormField & {
+  key: string;
+  field: CatalogueField;
+  /** A file field: the most a holder may upload for it, in bytes. */
+  max_bytes?: number;
+};
 
 export type Offer = {
   issuer: {
@@ -28,6 +33,8 @@ export type Offer = {
     /** By language. */
     description: Texts | null;
     did: string;
+    /** The domains its tenant has proved by DNS, oldest first (`verifiedDomains`). */
+    domains?: string[];
   };
   credential_type: CredentialType;
   /** The credential type's category, named and with its icon. */
@@ -75,6 +82,8 @@ export type WalletState = {
 export type HolderApplication = {
   id: string;
   slug: string;
+  /** Until when its secret opens it: a day unsent, then after each step. */
+  expires_at: string;
   status: ApplicationStatus;
   holder_did: string | null;
   offer: Offer;
@@ -122,4 +131,49 @@ export async function fetchApplication(
     { headers: { "X-Application-Secret": secret } },
   );
   return data;
+}
+
+/** The most applications listed from one browser's cookies. */
+const listed = 50;
+
+/**
+ * Every application this browser holds the secret of (one cookie each), as
+ * the API sees it now, the latest step first; `failed` when some could not be
+ * read (the API out of reach). One the API no longer opens is left out.
+ */
+export async function fetchMyApplications(): Promise<{
+  items: HolderApplication[];
+  failed: boolean;
+}> {
+  const prefix = applicationCookie("");
+  const held = (await cookies())
+    .getAll()
+    .filter(({ name, value }) => name.startsWith(prefix) && value)
+    .slice(0, listed);
+  const found = await Promise.all(
+    held.map(({ name, value }) =>
+      api<HolderApplication>(
+        `/applications/${encodeURIComponent(name.slice(prefix.length))}`,
+        { headers: { "X-Application-Secret": value } },
+      ),
+    ),
+  );
+  const items = found
+    .flatMap(({ data }) => (data ? [data] : []))
+    .sort((a, b) => latestStep(b).localeCompare(latestStep(a)));
+  return {
+    items,
+    failed: found.some(({ status }) => status === null || status >= 500),
+  };
+}
+
+/** When an application last moved, as an ISO date ("" when never sent). */
+function latestStep(application: HolderApplication): string {
+  return (
+    application.delivered_at ??
+    application.issued_at ??
+    application.decided_at ??
+    application.submitted_at ??
+    ""
+  );
 }

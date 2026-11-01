@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CopyButton } from "@/app/components/CopyButton";
 import { CredentialCard } from "@/app/components/CredentialCard";
 import { issuerHref } from "@/app/components/OfferTile";
+import { VerifiedDomains } from "@/app/components/VerifiedDomains";
 import { Badge } from "@/app/components/ui/badge";
 import { Card } from "@/app/components/ui/card";
 import { CategoryIcon } from "@/app/lib/category-icons";
@@ -75,6 +76,10 @@ export default async function OfferPage({
           <p className="text-muted-foreground">
             {label(offer.credential_type.descriptions, locale)}
           </p>
+          <VerifiedDomains
+            domains={offer.issuer.domains}
+            label={t.issuer.domains}
+          />
           <p className="flex items-center gap-1 font-mono text-[11px] text-faint">
             <span className="break-all">{offer.issuer.did}</span>
             <CopyButton

@@ -2,15 +2,24 @@
 
 import { CheckCircle2Icon, ShieldCheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Alert, AlertDescription } from "@/app/components/ui/alert";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { useI18n } from "@/app/i18n/client";
-import { saveApplicationAnswers } from "@/app/lib/application-actions";
-import type { FileMeta, HolderApplication } from "@/app/lib/applications";
+import {
+  applicationStatus,
+  keepApplication,
+  saveApplicationAnswers,
+} from "@/app/lib/application-actions";
+import type {
+  ApplicationStatus,
+  FileMeta,
+  HolderApplication,
+} from "@/app/lib/applications";
+import { awaitsIssuer, firstDelay, nextDelay } from "@/app/lib/status-poll";
 import { label, type Labels } from "@/app/lib/form-fields";
 import { hasText } from "@/app/lib/texts";
 import { ApplicationWallet } from "./ApplicationWallet";
@@ -23,6 +32,58 @@ function shownValue(value: unknown): string {
   if (value && typeof value === "object")
     return Object.values(value).map(shownValue).join(", ");
   return String(value ?? "");
+}
+
+/**
+ * Follow a sent application while the issuer has it: look at its status
+ * after a while, waiting twice as long each time (up to a minute), never
+ * while the page is hidden (a look as soon as it shows again), and run
+ * `onChange` — the page reloads from the API — once it has moved.
+ */
+function useFollowStatus(
+  id: string,
+  status: ApplicationStatus,
+  onChange: () => void,
+) {
+  useEffect(() => {
+    if (!awaitsIssuer(status)) return;
+    let delay = firstDelay;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let stopped = false;
+    let looking = false;
+    const schedule = () => {
+      clearTimeout(timer);
+      if (!stopped && !document.hidden) timer = setTimeout(look, delay);
+    };
+    const look = async () => {
+      if (looking) return;
+      looking = true;
+      const now = await applicationStatus(id).catch(() => null);
+      looking = false;
+      if (stopped) return;
+      if (now && now.status !== status) {
+        stopped = true;
+        onChange();
+        return;
+      }
+      delay = nextDelay(delay);
+      schedule();
+    };
+    const shown = () => {
+      if (document.hidden) clearTimeout(timer);
+      else {
+        delay = firstDelay;
+        void look();
+      }
+    };
+    document.addEventListener("visibilitychange", shown);
+    schedule();
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+      document.removeEventListener("visibilitychange", shown);
+    };
+  }, [id, status, onChange]);
 }
 
 /** One numbered step of the application. */
@@ -88,6 +149,15 @@ export function Apply({
   const [submitting, setSubmitting] = useState(false);
   const typeName = label(offer.credential_type.labels, locale);
 
+  // Opened, the cookie holding its secret lasts as long as the application
+  // does now (a page cannot set cookies: a server action does).
+  useEffect(() => {
+    void keepApplication(application.id);
+  }, [application.id, application.expires_at]);
+
+  // Sent, the page follows the issuer's decision and issuance by itself.
+  useFollowStatus(application.id, status, refresh);
+
   const stepper = <Stepper application={application} submitting={submitting} />;
 
   if (status !== "open" && status !== "paired")
@@ -95,7 +165,10 @@ export function Apply({
       <div className="grid gap-5">
       {stepper}
       <Card className="gap-3 p-6">
-        <h2 className="flex items-center gap-2 text-lg font-semibold">
+        <h2
+          className="flex items-center gap-2 text-lg font-semibold"
+          aria-live="polite"
+        >
           <CheckCircle2Icon className="size-5 text-primary" />
           {copy.status[status]}
         </h2>
@@ -316,6 +389,7 @@ export function Apply({
                   id={`f-${field.key}`}
                   applicationId={application.id}
                   field={field.field}
+                  maxBytes={field.max_bytes}
                   narrow={field.narrow ?? {}}
                   required={field.required}
                   help={field.help ? label(field.help, locale) : undefined}
