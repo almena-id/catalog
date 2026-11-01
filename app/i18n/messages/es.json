@@ -135,7 +135,7 @@
     "credentialRevoked": "{issuer} ha revocado esta credencial: los verificadores ya no la aceptan.",
     "steps": {
       "label": "Pasos de tu solicitud",
-      "pair": "Vincular la wallet",
+      "pair": "Vincular el wallet",
       "present": "Presentar credenciales",
       "fill": "Rellenar",
       "submit": "Firmar y enviar",
