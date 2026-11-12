@@ -32,7 +32,6 @@ ENV NODE_ENV=production \
 RUN adduser --system --uid 10001 --no-create-home catalog
 COPY --from=build --chown=catalog /app/.next/standalone ./
 COPY --from=build --chown=catalog /app/.next/static ./.next/static
-COPY --from=build --chown=catalog /app/public ./public
 USER catalog
 EXPOSE 3000
 
